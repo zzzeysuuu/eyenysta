@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EyeNysta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: kısa tanıtım (hero + tek bant), ardından sayfanın asıl işi olan sıralı teslim belgeleri listesi, en sonda ekip */
+:root{
+  --bg:#FFFFFF; --bg-soft:#FBF4F4; --ink:#1E1416; --ink-2:#6B5A5D; --rule:#EEDDDF;
+  --red:#C8102E; --red-ink:#FFFFFF; --red-soft:#FCE8EB; --ok:#1F7A4D; --ok-soft:#E3F3EA; --warn:#B4540A;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --max:1040px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161011; --bg-soft:#1F1718; --ink:#F6ECEC; --ink-2:#BCA8AB; --rule:#3A2B2D;
+  --red:#FF4D63; --red-ink:#1A0A0D; --red-soft:#3A1A20; --ok:#5FD39A; --ok-soft:#173226; --warn:#F2A45A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161011; --bg-soft:#1F1718; --ink:#F6ECEC; --ink-2:#BCA8AB; --rule:#3A2B2D;
+  --red:#FF4D63; --red-ink:#1A0A0D; --red-soft:#3A1A20; --ok:#5FD39A; --ok-soft:#173226; --warn:#F2A45A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--red)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.drop:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.12;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,38px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:19px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.muted{color:var(--ink-2)}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+header.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:20px;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--red);font-weight:800}
+.brand-mark{width:28px;height:28px;border-radius:50%;background:var(--red);display:grid;place-items:center;flex:none}
+.brand-mark i{width:9px;height:9px;border-radius:50%;background:var(--bg);display:block;animation:saccade 2.4s infinite}
+@keyframes saccade{0%,60%{transform:translateX(-5px)}62%,100%{transform:translateX(5px)}}
+nav.links{display:flex;gap:2px;margin-left:auto}
+nav.links a{color:var(--ink-2);text-decoration:none;font-size:15px;padding:6px 10px;border-radius:6px;white-space:nowrap}
+nav.links a:hover{color:var(--red);background:var(--red-soft)}
+nav.links a.cta{background:var(--red);color:var(--red-ink);font-weight:600}
+
+/* hero */
+.hero{padding-block:48px 40px;border-bottom:1px solid var(--rule)}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center}
+.hero h1{font-size:clamp(36px,5.6vw,60px);font-weight:800;letter-spacing:-.025em;margin-top:12px}
+.hero h1 span{color:var(--red)}
+.hero .lead{font-size:18.5px;color:var(--ink-2);margin-top:16px;max-width:48ch}
+.btn{font:600 16px var(--f-body);border-radius:8px;padding:11px 18px;border:1.5px solid var(--red);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.primary{background:var(--red);color:var(--red-ink)}
+.btn:disabled{opacity:.55;cursor:default}
+.hero .btn{margin-top:24px}
+
+.trace{border:1px solid var(--rule);border-radius:12px;background:var(--bg-soft);padding:16px 16px 12px;margin:0;min-width:0}
+.trace-head{display:flex;justify-content:space-between;gap:12px;font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.trace-head b{color:var(--red);font-weight:600}
+.trace svg{width:100%;height:auto;display:block;margin-top:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--f-mono);font-size:12px;color:var(--ink-2);margin-top:6px}
+.legend span::before{content:"";display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px;background:var(--ink-2)}
+.legend .lf::before{background:var(--red)}
+
+/* project summary */
+section.band{padding-block:60px;border-bottom:1px solid var(--rule)}
+section.band.soft{background:var(--bg-soft)}
+.sec-head{display:grid;gap:10px;max-width:64ch;margin-bottom:28px}
+.sec-head p{color:var(--ink-2)}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.pillars div{border-top:3px solid var(--red);padding-top:14px;display:grid;gap:6px;align-content:start}
+.pillars p{color:var(--ink-2);font-size:16px}
+.types{margin-top:32px;display:grid;gap:12px}
+.types-label{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.types ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.types li{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;font-size:14.5px;color:var(--ink-2);display:grid;gap:4px;align-content:start;min-width:0}
+.types li b{font-family:var(--f-display);font-size:16.5px;color:var(--ink)}
+.types li.central{border-color:var(--red)}
+.types li.central b{color:var(--red)}
+@media (max-width:860px){.types ul{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.types ul{grid-template-columns:1fr}}
+.outcomes{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.out{font-size:15px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--rule);background:var(--bg)}
+.out b{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+.out.g b{color:var(--ok)} .out.w b{color:var(--warn)} .out.r{border-color:var(--red)} .out.r b{color:var(--red)}
+
+/* reports */
+.reports-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:28px;align-items:start}
+.progress{display:flex;align-items:center;gap:12px;font-family:var(--f-mono);font-size:13px;color:var(--ink-2);margin-bottom:14px;font-variant-numeric:tabular-nums}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);width:0}
+.slots{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:d}
+.slot{border:1px solid var(--rule);border-radius:10px;background:var(--bg);padding:14px 16px;display:grid;gap:10px}
+.slot.done{border-color:color-mix(in srgb,var(--ok) 45%,var(--rule))}
+.slot-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.slot-head::before{counter-increment:d;content:counter(d);font-family:var(--f-mono);font-weight:600;font-size:13px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--rule);color:var(--ink-2);display:grid;place-items:center}
+.slot.done .slot-head::before{content:"✓";border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.slot-head h3{font-size:17.5px;min-width:0;overflow-wrap:anywhere}
+.state{font-family:var(--f-mono);font-size:12px;padding:3px 9px;border-radius:999px;white-space:nowrap;border:1px solid var(--rule);color:var(--ink-2)}
+.state.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
+.files{display:grid;gap:6px;padding-left:40px}
+.file{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:15px;padding-top:8px;border-top:1px dashed var(--rule)}
+.file .fmeta{min-width:0;display:grid}
+.file .fname{font-weight:600;overflow-wrap:anywhere}
+.file .fsub{font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.file .fnote{font-size:14.5px;color:var(--ink-2);overflow-wrap:anywhere}
+.factions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.factions a,.factions button{font:600 14px var(--f-body);padding:6px 12px;border-radius:6px;text-decoration:none;white-space:nowrap;cursor:pointer}
+.factions a{background:var(--red);color:var(--red-ink)}
+.factions button{background:none;border:1px solid var(--rule);color:var(--ink-2)}
+.factions button.danger{border-color:var(--red);color:var(--red)}
+.slot-add{justify-self:start;margin-left:40px;font:600 14px var(--f-body);background:none;border:1px dashed var(--red);color:var(--red);border-radius:6px;padding:5px 12px;cursor:pointer}
+.loading{border:1.5px dashed var(--rule);border-radius:10px;padding:24px;text-align:center;color:var(--ink-2)}
+
+.panel{border:1px solid var(--rule);border-radius:12px;padding:20px;background:var(--bg);display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px)}
+.panel label{display:grid;gap:4px;font-size:14px;font-weight:600}
+.panel input,.panel select,.panel textarea{font:400 16px var(--f-body);padding:9px 11px;border:1px solid var(--rule);border-radius:7px;background:var(--bg);color:var(--ink);width:100%}
+.panel textarea{min-height:64px;resize:vertical}
+.seg{display:flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.seg button{flex:1;font:600 14px var(--f-body);padding:8px;border:0;background:var(--bg);color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--red-soft);color:var(--red)}
+.drop{border:1.5px dashed var(--red);border-radius:8px;padding:16px;text-align:center;font-size:14.5px;color:var(--ink-2);cursor:pointer;background:var(--bg-soft)}
+.drop.has{border-style:solid;color:var(--ink)}
+.status{font-size:14px;min-height:1.4em}
+.status.err{color:var(--red)} .status.ok{color:var(--ok)}
+.note-box{font-size:14.5px;color:var(--ink-2);border-left:3px solid var(--red);padding-left:12px}
+
+.reports-one{max-width:760px}
+/* team */
+.team-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.group{display:grid;gap:10px;align-content:start}
+.group .label{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.group ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.group li{font-family:var(--f-display);font-size:20px;font-weight:700}
+
+footer{padding-block:24px;font-size:14px;color:var(--ink-2)}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+
+@media (max-width:860px){
+  .hero-grid,.reports-grid{grid-template-columns:1fr}
+  .pillars,.team-grid{grid-template-columns:1fr}
+  .panel{position:static}
+}
+@media (max-width:520px){
+  nav.links a:not(.cta){display:none}
+  .files{padding-left:0}
+  .slot-add{margin-left:0}
+  .file{grid-template-columns:1fr}
+  .factions{justify-content:flex-start}
+  section.band{padding-block:44px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{margin:0}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="EyeNysta home"><span class="brand-mark"><i></i></span><span>Eye<b>Nysta</b></span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#proje">Project</a>
+      <a href="#ekip">Team</a>
+      <a class="cta" href="#raporlar">Reports</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Senior design project · 2026–2027</div>
+        <h1>Measuring vertigo attacks with a <span>phone camera</span></h1>
+        <p class="lead">A 30-second eye video recorded during an attack is enough to measure nystagmus, identify the vertigo pattern and compare the attack with the user’s known diagnosis.</p>
+        <a class="btn primary" href="#raporlar">Project documents</a>
+      </div>
+      <figure class="trace" aria-label="Sample nystagmus trace">
+        <div class="trace-head"><span>Eye position · horizontal</span><b>SAMPLE SIGNAL</b></div>
+        <svg id="traceSvg" viewBox="0 0 480 150" role="img" aria-label="Sawtooth-shaped nystagmus signal">
+          <g id="grid"></g>
+          <path id="tracePath" fill="none" stroke-width="2.2" stroke-linejoin="round"></path>
+          <g id="fastMarks"></g>
+        </svg>
+        <div class="legend"><span>slow phase</span><span class="lf">fast phase</span><span id="spv"></span></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band soft" id="proje">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Project</div>
+        <h2>General-purpose AI can describe the eye. EyeNysta measures it.</h2>
+      </div>
+      <div class="pillars">
+        <div><h3>Recording and symptoms</h3><p>During an attack the user records a 30-second eye video, and recording quality is checked while filming. As soon as the video is uploaded, a list of symptoms appears, ordered by urgency. The most urgent ones (double vision, slurred speech, numbness, inability to stand) come first, followed by distinguishing symptoms such as hearing loss and headache.</p></div>
+        <div><h3>Measurement</h3><p>MediaPipe locates the eye region. We fine-tune a pretrained vision model on eye images we label ourselves to track the pupil more precisely, and compute nystagmus velocity in °/s. All analysis runs on the phone.</p></div>
+        <div><h3>Pattern matching</h3><p>The app does not diagnose. From eye findings and symptoms it determines which vertigo pattern the attack resembles, then compares it with the user’s known diagnosis and previous attacks.</p></div>
+      </div>
+      <div class="types">
+        <span class="types-label">Patterns recognised</span>
+        <ul>
+          <li><b>BPPV</b>Displaced inner-ear crystals; triggered by head movement, lasts under a minute</li>
+          <li><b>Vestibular neuritis</b>Inflamed balance nerve; one-directional nystagmus lasting hours to days</li>
+          <li><b>Ménière’s disease</b>Inner-ear fluid pressure; hearing loss, tinnitus, ear fullness</li>
+          <li><b>Vestibular migraine</b>Neurological; headache, sensitivity to light and sound</li>
+          <li class="central"><b>Central sign</b>Brainstem or cerebellum; direction-changing or vertical nystagmus, emergency alert</li>
+        </ul>
+      </div>
+      <div class="outcomes" aria-label="The three possible results">
+        <span class="out g"><b>Consistent</b>Matches your diagnosis, added to your report</span>
+        <span class="out w"><b>Inconsistent</b>Differs from earlier attacks, consult your doctor</span>
+        <span class="out r"><b>Danger</b>Call emergency services (112) now</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="raporlar">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Reports</div>
+        <h2>Project documents</h2>
+        <p>All deliverables are listed below in submission order. Every uploaded document can be opened and downloaded.</p>
+      </div>
+      <div class="reports-one">
+        <div style="min-width:0">
+          <div class="progress"><span id="progText">0 / 7 submitted</span><span class="bar"><i id="progBar"></i></span></div>
+          <ol class="slots" id="slots"><li class="loading">Loading documents…</li></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" id="ekip">
+    <div class="wrap">
+      <div class="sec-head"><div class="eyebrow">Team</div><h2>Project team</h2></div>
+      <div class="team-grid">
+        <div class="group"><span class="label">Team Members</span><ul><li>Zeynep Sude Şahin</li><li>Merve Nur Haşlak</li><li>Eylül Yaren Koç</li></ul></div>
+        <div class="group"><span class="label">Supervisor</span><ul><li>Ayşenur Birtürk</li></ul></div>
+        <div class="group"><span class="label">Jury Members</span><ul><li>Eren Ulu</li><li>Deniz Cantürk</li></ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>EyeNysta · Senior design project, 2026–2027</span>
+    <span>Research prototype, not a medical diagnostic tool.</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  /* ---------- hero trace ---------- */
+  const W = 480, H = 150, mid = H / 2, NS = 'http://www.w3.org/2000/svg';
+  const grid = document.getElementById('grid'), path = document.getElementById('tracePath'), marks = document.getElementById('fastMarks');
+  for (let i = 1; i < 6; i++) { const l = document.createElementNS(NS,'line'); l.setAttribute('x1', i*80); l.setAttribute('x2', i*80); l.setAttribute('y1', 4); l.setAttribute('y2', H-4); l.setAttribute('stroke','var(--rule)'); grid.appendChild(l); }
+  const z = document.createElementNS(NS,'line'); z.setAttribute('x1',0); z.setAttribute('x2',W); z.setAttribute('y1',mid); z.setAttribute('y2',mid); z.setAttribute('stroke','var(--rule)'); z.setAttribute('stroke-dasharray','3 4'); grid.appendChild(z);
+  const pxPerSec = 80, degPx = (H/2 - 10) / 10, period = 0.5, slowFrac = 0.84, amp = 8;
+  document.getElementById('spv').textContent = 'SPV ≈ ' + ((2*amp)/(period*slowFrac)).toFixed(0) + ' °/s';
+  path.setAttribute('stroke', 'var(--ink-2)');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, t0 = performance.now();
+  const pos = t => { const p = ((t % period) + period) % period; return p < period*slowFrac ? -amp + 2*amp*(p/(period*slowFrac)) : amp - 2*amp*((p-period*slowFrac)/(period*(1-slowFrac))); };
+  function draw(now){
+    const shift = reduce ? 0 : (now - t0) / 1000; let d = '';
+    for (let s = 0; s <= W/pxPerSec + 1e-9; s += 0.01) d += (s === 0 ? 'M' : 'L') + (s*pxPerSec).toFixed(1) + ' ' + (mid - pos(s + shift)*degPx).toFixed(1);
+    path.setAttribute('d', d); marks.textContent = '';
+    for (let k = Math.floor(shift/period); k * period - shift < W/pxPerSec; k++) {
+      const xs = (k*period + period*slowFrac - shift)*pxPerSec, xe = ((k+1)*period - shift)*pxPerSec;
+      if (xe < 0 || xs > W) continue;
+      const l = document.createElementNS(NS,'line');
+      l.setAttribute('x1', xs); l.setAttribute('y1', mid - amp*degPx); l.setAttribute('x2', xe); l.setAttribute('y2', mid + amp*degPx);
+      l.setAttribute('stroke','var(--red)'); l.setAttribute('stroke-width','2.6'); l.setAttribute('stroke-linecap','round');
+      marks.appendChild(l);
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  /* ---------- deliverables (read from reports.json) ---------- */
+  const DELIVERABLES = ['Project Proposal','Project Specifications Report','Backlog 1','Project Analysis Report','Backlog 2','High-Level Design Report','Backlog 3'];
+  const slotsEl = document.getElementById('slots');
+  const fmtDate = s => { try { return new Date(s + 'T12:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}); } catch(e) { return s; } };
+  function render(rows){
+    slotsEl.textContent = ''; let done = 0;
+    DELIVERABLES.forEach(name => {
+      const items = rows.filter(r => r.deliverable === name && r.file).sort((a,b) => (b.date||'').localeCompare(a.date||''));
+      if (items.length) done++;
+      const li = document.createElement('li'); li.className = 'slot' + (items.length ? ' done' : '');
+      const head = document.createElement('div'); head.className = 'slot-head';
+      const h = document.createElement('h3'); h.textContent = name;
+      const st = document.createElement('span'); st.className = 'state' + (items.length ? ' ok' : ''); st.textContent = items.length ? 'Uploaded' : 'Pending';
+      head.append(h, st); li.appendChild(head);
+      if (items.length) {
+        const files = document.createElement('div'); files.className = 'files';
+        items.forEach((r, i) => {
+          const f = document.createElement('div'); f.className = 'file';
+          const m = document.createElement('div'); m.className = 'fmeta';
+          const fn = document.createElement('span'); fn.className = 'fname';
+          const isLink = /^https?:\/\//i.test(r.file);
+          fn.textContent = (isLink ? 'Link' : r.file.split('/').pop()) + (i === 0 && items.length > 1 ? ' · latest' : '');
+          const sub = document.createElement('span'); sub.className = 'fsub'; sub.textContent = r.date ? fmtDate(r.date) : '';
+          m.append(fn, sub);
+          if (r.note) { const n = document.createElement('span'); n.className = 'fnote'; n.textContent = r.note; m.appendChild(n); }
+          const act = document.createElement('div'); act.className = 'factions';
+          const a = document.createElement('a'); a.href = r.file; a.target = '_blank'; a.rel = 'noopener'; a.textContent = isLink ? 'Open' : 'Open / download';
+          act.appendChild(a); f.append(m, act); files.appendChild(f);
+        });
+        li.appendChild(files);
+      }
+      slotsEl.appendChild(li);
+    });
+    document.getElementById('progText').textContent = done + ' / ' + DELIVERABLES.length + ' submitted';
+    document.getElementById('progBar').style.width = (done / DELIVERABLES.length * 100) + '%';
+  }
+  fetch('reports.json', {cache: 'no-store'})
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => render(Array.isArray(data) ? data : []))
+    .catch(() => render([]));
+})();
+</script>
+
+</body>
+</html>
